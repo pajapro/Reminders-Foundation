@@ -57,4 +57,28 @@ class TaskUnitTests: XCTestCase {
 		XCTAssertNil(task.dueDate)
 		XCTAssertNil(task.remainingTime)
 	}
+	
+	func testJSONInitializer() {
+		let json: JSON = [JSONKeys.title: "Clean kitchen", JSONKeys.priority: "medium"]
+		let task = Task(rawValue: json)
+		
+		XCTAssertEqual(task?.rawValue[JSONKeys.title] as? String, json[JSONKeys.title] as? String)
+		XCTAssertEqual(task?.rawValue[JSONKeys.priority] as? String, json[JSONKeys.priority] as? String)
+	}
+	
+	func testJSONInitializerWithDate() {
+		let json: JSON = [JSONKeys.title: "Tidy up kitchen", JSONKeys.priority: "low", JSONKeys.dueDate: "Thu, 22 Oct 2015 07:45:17"]
+		let task = Task(rawValue: json)
+		
+		XCTAssertEqual(task?.rawValue[JSONKeys.title] as? String, json[JSONKeys.title] as? String)
+		XCTAssertEqual(task?.rawValue[JSONKeys.priority] as? String, json[JSONKeys.priority] as? String)
+		XCTAssertEqual(task?.rawValue[JSONKeys.dueDate] as? String, json[JSONKeys.dueDate] as? String)
+	}
+	
+	func testJSONInitializerWithInvalidDate() {
+		let json: JSON = [JSONKeys.title: "Mess up kitchen", JSONKeys.priority: "low", JSONKeys.dueDate: "Invalid date format"]
+		let task = Task(rawValue: json)
+		
+		XCTAssertNil(task?.rawValue[JSONKeys.dueDate])
+	}
 }

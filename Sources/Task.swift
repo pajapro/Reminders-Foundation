@@ -50,3 +50,38 @@ public struct Task {
 		self.dueDate = dueDate
 	}
 }
+
+// MARK: RawRepresentable protocol
+
+extension Task: RawRepresentable {
+	
+	public init?(rawValue: JSON) {
+		guard let title = rawValue[JSONKeys.title] as? String else {
+			assertionFailure("JSON structure does not contain \(JSONKeys.title) key")
+			return nil
+		}
+		self.title = title
+		
+		guard let rawPriority = rawValue[JSONKeys.priority] as? String, let priority = Priority(rawValue: rawPriority) else {
+			assertionFailure("JSON structure does not contain \(JSONKeys.priority) key")
+			return nil
+		}
+		self.priority = priority
+		
+		if let rawDueDate = rawValue[JSONKeys.dueDate] as? String, let dueDate = DateFormatter.configuredDateFormatter().date(from: rawDueDate) {
+			self.dueDate = dueDate
+		}
+	}
+	
+	public var rawValue: JSON  {
+		var JSONdictionary = JSON()
+		JSONdictionary[JSONKeys.title] = self.title
+		JSONdictionary[JSONKeys.priority] = self.priority.rawValue
+		
+		if let unwrappedDueDate = self.dueDate {
+			JSONdictionary[JSONKeys.dueDate] = DateFormatter.configuredDateFormatter().string(from: unwrappedDueDate)
+		}
+		
+		return JSONdictionary
+	}
+}
