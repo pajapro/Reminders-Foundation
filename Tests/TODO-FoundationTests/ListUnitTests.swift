@@ -67,4 +67,22 @@ class ListUnitTests: XCTestCase {
 		
 		XCTAssertNotEqual(list.completedTasks, 0)
 	}
+	
+	func testJSONInitializer() {
+		let json: JSON = [JSONKeys.title: "TODO list"]
+		let list = List(rawValue: json)
+		
+		XCTAssertEqual(list?.rawValue[JSONKeys.title] as? String, json[JSONKeys.title] as? String)
+	}
+	
+	func testJSONInitializerWithTasks() {
+		let taskJSON: JSON = [JSONKeys.title: "Clean kitchen", JSONKeys.priority: "medium"]
+		let taskJSON2: JSON = [JSONKeys.title: "Tidy up kitchen", JSONKeys.priority: "low", JSONKeys.dueDate: "Thu, 22 Oct 2015 07:45:17"]
+		
+		let json: JSON = [JSONKeys.title: "TODO list", JSONKeys.tasks: [taskJSON, taskJSON2]]
+		let list = List(rawValue: json)
+		
+		XCTAssertEqual(list?.rawValue[JSONKeys.title] as? String, json[JSONKeys.title] as? String)
+		XCTAssertEqual(list?.rawValue[JSONKeys.tasks] as? String, json[JSONKeys.tasks] as? String)
+	}
 }

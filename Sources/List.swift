@@ -31,10 +31,34 @@ public struct List {
 	}
 }
 
-/// Extension with initializer to avoid loosing the memberwise initializer
+// MARK: Extension with initializer to avoid loosing the memberwise initializer
 public extension List {
 	
 	init(title: String) {
 		self.title = title
+	}
+}
+
+// MARK: RawRepresentable protocol
+
+extension List: RawRepresentable {
+	
+	public init?(rawValue: JSON) {
+		guard let title = rawValue[JSONKeys.title] as? String else {
+			assertionFailure("JSON structure does not contain \(JSONKeys.title) key")
+			return nil
+		}
+		self.title = title
+		
+		if let tasks = rawValue[JSONKeys.tasks] as? [JSON] {
+			self.tasks = tasks.flatMap { Task(rawValue: $0) }
+		}
+	}
+	
+	public var rawValue: JSON  {
+		var JSONdictionary = JSON()
+		JSONdictionary[JSONKeys.title] = self.title
+		JSONdictionary[JSONKeys.tasks] = self.tasks.map { $0.rawValue }
+		return JSONdictionary
 	}
 }
