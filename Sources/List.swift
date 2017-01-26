@@ -12,21 +12,21 @@ import Foundation
 public struct List {
 	
 	/// Generated unique identifier
-	let id: String = UUID().uuidString
+	public let id: String = UUID().uuidString
 	
 	/// Task title
-	var title: String
+	public var title: String
 	
 	/// An array of tasks
-	var tasks: [Task] = []
+	public var tasks: [Task] = []
 	
 	/// Returns the amount of completed tasks
-	var completedTasks: Int {
+	public var completedTasks: Int {
 		return self.tasks.filter{ $0.isDone }.count
 	}
 	
 	/// Returns the amount of incompleted tasks
-	var incompletedTasks: Int {
+	public var incompletedTasks: Int {
 		return self.tasks.filter{ !$0.isDone }.count
 	}
 }

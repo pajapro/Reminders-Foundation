@@ -20,31 +20,31 @@ public enum Priority: String {
 public struct Task {
 	
 	/// Generated unique identifier
-	let id: String = UUID().uuidString
+	public let id: String = UUID().uuidString
 	
 	/// Generated date of task creation
-	let creationDate: Date = Date()
+	public let creationDate: Date = Date()
 	
 	/// Task done state
-	var isDone: Bool = false
+	public var isDone: Bool = false
 	
 	/// Task title
-	var title: String
+	public var title: String
 	
 	/// Task priority
-	var priority: Priority
+	public var priority: Priority
 	
 	/// Reminder date
-	var dueDate: Date?
+	public var dueDate: Date?
 	
 	/// Computes the remaining time from now until due date
-	var remainingTime: DateComponents? {
+	public var remainingTime: DateComponents? {
 		guard let unwrappedDueDate = self.dueDate else { return nil }
 		
 		return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date(), to: unwrappedDueDate)
 	}
 	
-	init(title: String, priority: Priority, dueDate: Date? = nil) {
+	public init(title: String, priority: Priority, dueDate: Date? = nil) {
 		self.title = title
 		self.priority = priority
 		self.dueDate = dueDate
